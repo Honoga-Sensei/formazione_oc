@@ -1,0 +1,82 @@
+CREATE RESOURCE
+  
+  oc create <resource> <resource-name> -<options> #create a resource based on the info passed in the command
+  oc create -f <file.yaml> #create a resource with a file.yaml
+  oc create secret generic <secret-name> --from-literal=<key>=<value> #create a secret
+  oc create quota <quota-name> --hard=cpu=<value>,memory=<value> #create resource quote
+
+  oc run <pod-name> --image=<image-name> #create a pod with the given image
+  oc run <deployment-name> --image=<image-name> --restart=Always #the option --restart=Always create a deployment instead of a pod
+
+  oc new-app /path/in/local #crerate a new application from a local Git repository
+  oc new-app http://github.com/user/onlinerepo #crerate a new application from a remote Git repository
+  
+  oc apply -f <file.yaml> #create a new resource or modify an existing one from a file.yaml
+
+  oc process -f <template.yaml> | oc create -f #this command as first process an OpenShift templente and generate every resources inside it
+
+  oc import-image <imagestream-name> --from=<image-repo>:<tag> --confirm #creates or updates an ImageStream from an external image registry
+
+  oc expose <deployment> <deployment-name> --port=<port> #create a service for the given deployment
+  oc expose <service> <service-name> #create a route fer the given service
+
+LIST RESOURCES
+
+  oc get <resource> #list pods
+  oc get <resource> -o wide #list pods adding more informations
+  oc get <resource> -l <label>=<value>,<label>=<value>,... #list pods with one or more selector 
+  oc get <resource> -n <project> #list pods in a given project
+  oc get <resource> --field-selector=status.phase=Running #list pods in running state
+  oc get <resource> --field-selector spec.nodeName=<node-name> #list pods running on a given node
+  oc get <resource> | grep <name> #list pods with a given name
+
+you can use one or more filter at the same time like: oc get pods -n <project> -l <label>=<value> -o wide
+  
+VERIFY RESOURCE STATUS
+
+  oc describe <resource> <resource-name> #allow you to check info and status about a given object
+
+  oc status #show status of current project
+
+  oc rollout status <deployment> <my-deployment> #display the progress of the deployment rollout, including information about the current state, number of replicas, and any issues if the deployment is not progressing as expected
+  oc rollout history <deployment> <my-deployment> #shows the rollout history of a deployment or deployment configuration
+
+  oc logs <pod-name> #show logs of a given pod
+  oc logs <pod-name> -c <container-name> #show logs of a given pod for a specific container
+  oc logs -f <pod-name> #show logs for a given pod and follow them in real time
+
+EDIT RESOURCE
+
+  oc replace -f <file.yaml> #replace a resource by applying a new configuration file
+
+  oc apply -f <file.yaml> #create a new resource or modify an existing one from a file.yaml
+
+  oc label <resource> <resource-name> <label-key>=<label-value> #add or update label
+
+  oc edit <resource> <resource-name> #this command allow you to edit portion of a given resource
+  oc edit <resource> <resource-name> -o <file-format> #this command allow you to edit portion of a given resource and output the edited file in a specific format
+  
+  oc set image <resource> <resource-name> <container-name>=<new-image> #allow you to change the image in one or more container for a given resource
+  oc set env <resource> <resource-name> <KEY>=<VALUE> #add or update enviroment variable for a given resource
+  oc set resources <resource> <resource-name> --limits=cpu=<value>,memory=<value> #set limits to a given resource
+
+  oc scale <resource> <resource-name> --replicas=<number> #edit number of replicas for a given resource
+
+  oc annotate <resource> <resource-name> <description>=<my-description> #add annotation to a given resource
+
+  oc delete <resource> <resource-name> #delete a given resource
+
+PODS SPECIFIC COMMANDS
+
+  oc exec <pod-name> -- <command> #run a comand inside a given pod 
+  oc exec -it <pod-name> -- /bin/bash #start a shell session in a given pod
+  oc exec -it <pod-name> -c <container-name> -- /bin/bash #start a shell session in a given pod for a specific container
+
+  oc rsh <pod-name> #open a remote shell session into a running pod
+
+  oc cp /path/in/local <pod-name>:/path/in/container #move file from local to pod container
+  oc cp <pod-name>:/path/in/container /path/in/local #move file from pod container to local
+
+  oc port-forward <pod-name> <local-port>:<pod-port> #forward one or more local ports to a pod
+
+  oc attach <pod-name> #attach to a running container in a pod
